@@ -10,13 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Scanner;
-
 public class MainActivity extends AppCompatActivity {
     String fileName;
     static String t;
@@ -47,12 +40,12 @@ public class MainActivity extends AppCompatActivity {
                 fileName = String.valueOf(fileNameEdit.getText());
                 System.out.println(fileName);
 
-                Counter counter = new Counter("commonWords.txt", fileName);
+                Counter counter = new Counter("assets/commonWords.txt", fileName);
 
                 if (doesFileExist) {
 
-                    String[] topFiveWords = counter.getTopFiveWords();
-                    int[] topFiveFrequencies = counter.getTopFiveFrequencies();
+                    String[] topFiveWords = topFive.topFiveWords(fileName);
+                    int[] topFiveFrequencies = topFive.getTopFiveFrequencies();
 
                     String set_text = "The most common word in file " + fileName + " was " + topFiveWords[0] + " with " + topFiveFrequencies[0] + " occurences.";
 
@@ -73,21 +66,15 @@ public class MainActivity extends AppCompatActivity {
                 fileName = String.valueOf(fileNameEdit.getText());
                 System.out.println(fileName);
 
-                Counter counter = new Counter("commonWords.txt", fileName);
+                Counter counter = new Counter("assets/commonWords.txt", fileName);
+                String[] topFiveWords = topFive.topFiveWords(fileName);
+                int[] topFiveFrequencies = topFive.getTopFiveFrequencies();
+                t = "The top " + topFiveWords.length + " words in text one and their frequencies are:\n";
+                printTopFive(topFiveWords, topFiveFrequencies, 0);
 
-                if (doesFileExist) {
-                    String[] topFiveWords = counter.getTopFiveWords();
-                    int[] topFiveFrequencies = counter.getTopFiveFrequencies();
+                results.setText(t);
 
-                    t = "The top " + topFiveWords.length + " words in text one and their frequencies are:\n";
-                    printTopFive(topFiveWords, topFiveFrequencies, 0);
 
-                    results.setText(t);
-
-                } else {
-                    fileNotFound.setText("No File Exists!");
-                    results.setText("");
-                }
             }
         });
     }
