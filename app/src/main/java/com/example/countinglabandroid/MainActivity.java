@@ -34,31 +34,36 @@ public class MainActivity extends AppCompatActivity {
         top = (Button) findViewById(R.id.top);
         top5 = (Button) findViewById(R.id.top5);
 
-        top.setOnClickListener(v -> {
-            fileName = String.valueOf(fileNameEdit.getText());
-            System.out.println(fileName);
+        top.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                fileName = String.valueOf(fileNameEdit.getText());
+                System.out.println(fileName);
+                topFive topF = new topFive(fileName, "commonWords.txt");
 
-            if (doesFileExist) {
-                topFive topFive = new topFive();
-                String[] topFiveWords = com.example.countinglabandroid.topFive.topFiveWords(fileName, "assets/commonWords.txt");
-                int[] topFiveFrequencies = com.example.countinglabandroid.topFive.topFiveWordsFrequency(fileName, "assets/commonWords.txt");
-                String set_text = "The most common word in file " + fileName + " was " + topFiveWords[0] + " with " + topFiveFrequencies[0] + " occurences.";
-                results.setText(set_text);
+                if (doesFileExist) {
+                    String[] topFiveWords = topF.topFiveWords();
+                    int[] topFiveFrequencies = topF.topFiveWordsFrequency();
+                    String set_text = "Top Word in " + fileName + " is " + topFiveWords[0] + ", " + topFiveFrequencies[0] + " times";
+                    results.setText(set_text);
 
 
-                System.out.println();
-            } else {
-                fileNotFound.setText("No File Exists!");
-                results.setText("");
+                    System.out.println();
+                } else {
+                    fileNotFound.setText("No File Exists!");
+                    results.setText("");
+                }
             }
         });
         top5.setOnClickListener(v -> {
             fileName = String.valueOf(fileNameEdit.getText());
             System.out.println(fileName);
-            topFive topFive = new topFive();
-            String[] topFiveWords = com.example.countinglabandroid.topFive.topFiveWords(fileName, "assets/commonWords.txt");
-            int[] topFiveFrequencies = com.example.countinglabandroid.topFive.topFiveWordsFrequency(fileName, "assets/commonWords.txt");
-            t = "The top " + topFiveWords.length + " words in text one and their frequencies are:\n";
+            topFive topF = new topFive(fileName, "commonWords.txt");
+
+            String[] topFiveWords = topF.topFiveWords();
+            int[] topFiveFrequencies = topF.topFiveWordsFrequency();
+
+            t = "The top " + topFiveWords.length + " words in "+ fileName +" are:\n";
             printTopFive(topFiveWords, topFiveFrequencies, 0);
 
             results.setText(t);
@@ -71,18 +76,18 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < topFiveWords.length; ++i) {
             if (i == 0) {
                 t += (i+1 + ") " + topFiveWords[i] + ": " + topFiveFrequencies[i]);
-                t += "\n";
+                t += "\n\n";
             }
 
             else {
                 if (topFiveFrequencies[i] == topFiveFrequencies[i-1]) {
                     count++;
                     t += (i+1-count + ") " + topFiveWords[i] + ": " + topFiveFrequencies[i]);
-                    t += "\n";
+                    t += "\n\n";
                 } else {
                     count = 0;
                     t += (i+1 + ") " + topFiveWords[i] + ": " + topFiveFrequencies[i]);
-                    t += "\n";
+                    t += "\n\n";
                 }
             }
         }

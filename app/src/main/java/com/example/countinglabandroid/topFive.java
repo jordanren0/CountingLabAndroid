@@ -2,8 +2,15 @@ package com.example.countinglabandroid;
 import java.util.ArrayList;
 
 public class topFive {
+    private static String text;
+    private static String cword;
 
-    public static String[] topFiveWords(String text, String cword){
+    public topFive(String text, String cword) {
+        this.text = text;
+        this.cword = cword;
+    }
+
+    public static String[] topFiveWords(){
         Counter counter = new Counter();
         Parallel parallel = counter.count(text, cword);
         ArrayList<String> duplicate = parallel.getWordList();
@@ -25,7 +32,7 @@ public class topFive {
         return topFiveWord;
     }
 
-    public static int[] topFiveWordsFrequency(String text, String cword){
+    public static int[] topFiveWordsFrequency(){
         Counter counter = new Counter();
         Parallel parallel = counter.count(text, cword);
         ArrayList<String> duplicate = parallel.getWordList();
