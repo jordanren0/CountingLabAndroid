@@ -34,52 +34,40 @@ public class MainActivity extends AppCompatActivity {
         top = (Button) findViewById(R.id.top);
         top5 = (Button) findViewById(R.id.top5);
 
-        top.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                fileName = String.valueOf(fileNameEdit.getText());
-                System.out.println(fileName);
+        top.setOnClickListener(v -> {
+            fileName = String.valueOf(fileNameEdit.getText());
+            System.out.println(fileName);
 
-                Counter counter = new Counter("assets/commonWords.txt", fileName);
-
-                if (doesFileExist) {
-
-                    String[] topFiveWords = topFive.topFiveWords(fileName);
-                    int[] topFiveFrequencies = topFive.getTopFiveFrequencies();
-
-                    String set_text = "The most common word in file " + fileName + " was " + topFiveWords[0] + " with " + topFiveFrequencies[0] + " occurences.";
+            if (doesFileExist) {
+                topFive topFive = new topFive();
+                String[] topFiveWords = com.example.countinglabandroid.topFive.topFiveWords(fileName, "assets/commonWords.txt");
+                int[] topFiveFrequencies = com.example.countinglabandroid.topFive.topFiveWordsFrequency(fileName, "assets/commonWords.txt");
+                String set_text = "The most common word in file " + fileName + " was " + topFiveWords[0] + " with " + topFiveFrequencies[0] + " occurences.";
+                results.setText(set_text);
 
 
-                    results.setText(set_text);
-
-
-                    System.out.println();
-                } else {
-                    fileNotFound.setText("No File Exists!");
-                    results.setText("");
-                }
+                System.out.println();
+            } else {
+                fileNotFound.setText("No File Exists!");
+                results.setText("");
             }
         });
-        top5.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                fileName = String.valueOf(fileNameEdit.getText());
-                System.out.println(fileName);
+        top5.setOnClickListener(v -> {
+            fileName = String.valueOf(fileNameEdit.getText());
+            System.out.println(fileName);
+            topFive topFive = new topFive();
+            String[] topFiveWords = com.example.countinglabandroid.topFive.topFiveWords(fileName, "assets/commonWords.txt");
+            int[] topFiveFrequencies = com.example.countinglabandroid.topFive.topFiveWordsFrequency(fileName, "assets/commonWords.txt");
+            t = "The top " + topFiveWords.length + " words in text one and their frequencies are:\n";
+            printTopFive(topFiveWords, topFiveFrequencies, 0);
 
-                Counter counter = new Counter("assets/commonWords.txt", fileName);
-                String[] topFiveWords = topFive.topFiveWords(fileName);
-                int[] topFiveFrequencies = topFive.getTopFiveFrequencies();
-                t = "The top " + topFiveWords.length + " words in text one and their frequencies are:\n";
-                printTopFive(topFiveWords, topFiveFrequencies, 0);
-
-                results.setText(t);
+            results.setText(t);
 
 
-            }
         });
     }
 
-    private static void printTopFive(String[] topFiveWords, int[] topFiveFrequencies, int tCnt) {
+    private static void printTopFive(String[] topFiveWords, int[] topFiveFrequencies, int count) {
         for (int i = 0; i < topFiveWords.length; ++i) {
             if (i == 0) {
                 t += (i+1 + ") " + topFiveWords[i] + ": " + topFiveFrequencies[i]);
@@ -88,11 +76,11 @@ public class MainActivity extends AppCompatActivity {
 
             else {
                 if (topFiveFrequencies[i] == topFiveFrequencies[i-1]) {
-                    tCnt++;
-                    t += (i+1-tCnt + ") " + topFiveWords[i] + ": " + topFiveFrequencies[i]);
+                    count++;
+                    t += (i+1-count + ") " + topFiveWords[i] + ": " + topFiveFrequencies[i]);
                     t += "\n";
                 } else {
-                    tCnt = 0;
+                    count = 0;
                     t += (i+1 + ") " + topFiveWords[i] + ": " + topFiveFrequencies[i]);
                     t += "\n";
                 }
